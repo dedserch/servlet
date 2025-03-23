@@ -1,6 +1,6 @@
 package com.serzhputovski.servlet.servlet;
 
-import com.serzhputovski.servlet.service.UserService;
+import com.serzhputovski.servlet.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,16 +20,16 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        UserService userService = new UserService();
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
 
 
-        if(userService.isUsernameAvailable(username)) {
+        if(userServiceImpl.isUsernameAvailable(username)) {
             request.setAttribute("error", "Invalid username or password");
             request.getRequestDispatcher("/account/login.html").forward(request, response);
             return;
         }
 
-        if(!userService.checkPassword(username, password)) {
+        if(!userServiceImpl.checkPassword(username, password)) {
             request.setAttribute("error", "Invalid username or password");
             request.getRequestDispatcher("/account/login.html").forward(request, response);
             return;

@@ -1,7 +1,7 @@
 package com.serzhputovski.servlet.servlet;
 
 import com.serzhputovski.servlet.entity.User;
-import com.serzhputovski.servlet.service.UserService;
+import com.serzhputovski.servlet.service.impl.UserServiceImpl;
 import com.serzhputovski.servlet.validator.UserValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,9 +24,9 @@ public class RegisterServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        UserService userService = new UserService();
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
 
-        if(!userService.isUsernameAvailable(username)){
+        if(!userServiceImpl.isUsernameAvailable(username)){
             request.setAttribute("error", "Username is already taken");
             request.getRequestDispatcher("/account/register.html").forward(request, response);
             return;
@@ -36,7 +36,7 @@ public class RegisterServlet extends HttpServlet {
             UserValidator validator = new UserValidator();
             User user = new User(username, password);
             validator.validate(user);
-            userService.registerUser(user);
+            userServiceImpl.registerUser(user);
             response.sendRedirect("/account/login.html");
         }catch(Exception e){
             e.printStackTrace();

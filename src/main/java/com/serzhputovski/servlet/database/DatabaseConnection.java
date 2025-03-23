@@ -11,28 +11,40 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConnection {
-    Logger logger = LogManager.getLogger(DatabaseConnection.class);
+    private static final Logger logger = LogManager.getLogger(DatabaseConnection.class);
 
-    private static String URL;
-    private static String USER;
-    private static String PASSWORD;
+    private static final String URL;
+    private static final String USER;
+    private static final String PASSWORD;
 
     static {
+        Properties prop = new Properties();
         try (InputStream input = DatabaseConnection.class.getClassLoader().getResourceAsStream("config.properties")) {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Properties prop = new Properties();
             if (input == null) {
-                throw new IOException("Config file not found");
+                logger.fatal("Config file not found");
+                throw new RuntimeException("DB configuration file not found");
             }
+
             prop.load(input);
-            URL = prop.getProperty("db.url");
-            USER = prop.getProperty("db.user");
-            PASSWORD = prop.getProperty("db.password");
-        } catch (IOException | ClassNotFoundException ex){
-            ex.printStackTrace();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (IOException | ClassNotFoundException ex) {
+            logger.fatal("Initialization error", ex);
+            throw new ExceptionInInitializerError(ex);
         }
+
+        URL = prop.getProperty("db.url");
+        USER = prop.getProperty("db.user");
+        PASSWORD = prop.getProperty("db.password");
+
+        validateConfig();
     }
 
+    private static void validateConfig() {
+        if (URL == null || USER == null || PASSWORD == null) {
+            logger.fatal("Invalid database configuration");
+            throw new RuntimeException("Missing DB configuration parameters");
+        }
+    }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

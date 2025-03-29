@@ -23,17 +23,17 @@ public class LoginServlet extends HttpServlet {
         UserServiceImpl userServiceImpl = new UserServiceImpl();
 
 
-        if(userServiceImpl.isUsernameAvailable(username)) {
-            request.setAttribute("error", "Invalid username or password");
-            request.getRequestDispatcher("/account/login.html").forward(request, response);
-            return;
-        }
-
-        if(!userServiceImpl.checkPassword(username, password)) {
-            request.setAttribute("error", "Invalid username or password");
-            request.getRequestDispatcher("/account/login.html").forward(request, response);
-            return;
-        }
+//        if(userServiceImpl.isUsernameAvailable(username)) {
+//            request.setAttribute("error", "Invalid username or password");
+//            request.getRequestDispatcher("/account/login.html").forward(request, response);
+//            return;
+//        }
+//
+//        if(!userServiceImpl.checkPassword(username, password)) {
+//            request.setAttribute("error", "Invalid username or password");
+//            request.getRequestDispatcher("/account/login.html").forward(request, response);
+//            return;
+//        }
 
         request.getSession().setAttribute("user", username);
         response.sendRedirect(request.getContextPath() + "/account/login.html");

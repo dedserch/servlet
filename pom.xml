@@ -7,8 +7,6 @@
     <groupId>com.example</groupId>
     <artifactId>my-servlet-app</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <!-- Packaging file to war format for Tomcat -->
     <packaging>war</packaging>
 
     <properties>
@@ -18,7 +16,7 @@
     </properties>
 
     <dependencies>
-        <!-- API for Servlets (jakarta) -->
+        <!-- API для сервлетов (Jakarta) -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -26,40 +24,42 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Tomcat for development (version 10.x for jakarta) -->
+        <!-- Встраиваемый Tomcat для разработки (версия 10.1.39 для Jakarta) -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>10.1.36</version>
+            <version>10.1.39</version>
         </dependency>
 
-        <!-- Connect Log4j Core for create logs -->
+        <!-- Log4j Core для создания логов -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.20.0</version>
         </dependency>
-        <!-- API Log4j 2 (if you want to use Log4j 2 API straightforward) -->
+
+        <!-- API Log4j 2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.20.0</version>
         </dependency>
-        <!-- For Colorful Logs -->
+
+        <!-- Для цветных логов -->
         <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
             <version>2.4.0</version>
         </dependency>
 
-        <!-- JDBC to connect MySql to the app -->
+        <!-- JDBC драйвер для подключения к MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
 
-        <!-- Connect Bean Validation -->
+        <!-- Bean Validation API -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
@@ -76,18 +76,17 @@
             <version>4.0.2</version>
         </dependency>
 
-        <!-- Connect BCrypt for hashing passwords on server side -->
+        <!-- BCrypt для хеширования паролей -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Плагин для сборки war-архива -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -95,5 +94,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

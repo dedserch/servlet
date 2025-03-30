@@ -21,7 +21,6 @@ public class RegisterServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RegisterServlet initialized");
         this.userService = new UserServiceImpl();
     }
 
@@ -34,7 +33,6 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
 
         try {
             if(!userService.isUsernameAvailable(username)){

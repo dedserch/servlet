@@ -22,18 +22,15 @@ public class UserServiceImpl implements UserService {
         userDao.save(user.getUsername(), user.getPassword());
     }
 
-    public void loginUser(User user) {
-        String hashedPassword = hashPassword(user.getPassword());
-
-        if(!hashedPassword.equals(user.getPassword())) {
-            throw new IllegalArgumentException("Wrong password");
-        }
-
+    @Override
+    public User findByUsername(String username) throws DatabaseException {
+        return userDao.findByUsername(username);
     }
 
     private String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
+
     @Override
     public boolean isUsernameAvailable(String username) throws DatabaseException {
         User user = userDao.findByUsername(username);

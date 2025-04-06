@@ -5,21 +5,13 @@ import com.serzhputovski.servlet.dao.impl.UserDaoImpl;
 import com.serzhputovski.servlet.entity.User;
 import com.serzhputovski.servlet.exception.DatabaseException;
 import com.serzhputovski.servlet.service.UserService;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao = new UserDaoImpl();
+
     @Override
-    public void registerUser(User user) throws DatabaseException {
-        boolean isUsernameAvailable = isUsernameAvailable(user.getUsername());
-        if (!isUsernameAvailable) {
-            throw new IllegalArgumentException("Username is already in use");
-        }
-
-        String hashedPassword = hashPassword(user.getPassword());
-        user.setPassword(hashedPassword);
-
-        userDao.save(user.getUsername(), user.getPassword());
+    public int save(String username, String email, String password) throws DatabaseException {
+        return userDao.save(username, email, password);
     }
 
     @Override
@@ -27,14 +19,14 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username);
     }
 
-    private String hashPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
-
     @Override
     public boolean isUsernameAvailable(String username) throws DatabaseException {
         User user = userDao.findByUsername(username);
-
         return user == null;
+    }
+
+    @Override
+    public void updateUser(int userId, String newUsername, String newAvatarUrl) throws DatabaseException {
+        userDao.updateUser(userId, newUsername, newAvatarUrl);
     }
 }

@@ -16,8 +16,8 @@ public class UserValidator {
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
         if (!constraintViolations.isEmpty()) {
             StringBuilder errorMessage = new StringBuilder("Validation failed for user: ");
-            for (ConstraintViolation<User> constraintViolation : constraintViolations) {
-                errorMessage.append(constraintViolation.getMessage()).append(";");
+            for (ConstraintViolation<User> violation : constraintViolations) {
+                errorMessage.append(violation.getMessage()).append(";");
             }
             throw new IllegalArgumentException(errorMessage.toString());
         }

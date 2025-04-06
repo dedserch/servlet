@@ -1,8 +1,10 @@
+/* === СБРОС СТИЛЕЙ И БАЗОВАЯ НАСТРОЙКА === */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     display: flex;
     justify-content: center;
@@ -13,6 +15,8 @@ body {
     color: #333;
     text-align: center;
 }
+
+/* === КОНТЕЙНЕР === */
 .container {
     max-width: 400px;
     width: 100%;
@@ -21,14 +25,42 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
+
+/* === ЗАГОЛОВКИ И ТЕКСТ === */
 h1 {
     font-size: 2rem;
     margin-bottom: 10px;
 }
+
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
 p {
     font-size: 1.2rem;
     margin-bottom: 20px;
 }
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.profile-info {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.profile-info p {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+/* === ИНПУТЫ И КНОПКИ === */
 input {
     width: 100%;
     padding: 10px;
@@ -36,7 +68,8 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-button {
+
+button, .btn-submit {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
@@ -46,17 +79,53 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
-button:hover {
+
+button:hover, .btn-submit:hover {
     background-color: #0056b3;
 }
+
+/* === ССЫЛКИ === */
 a {
     color: #007bff;
     text-decoration: none;
 }
+
 a:hover {
     text-decoration: underline;
 }
-.already-account, .no-account {
+
+.already-account,
+.no-account {
     margin-top: 3%;
     font-size: small;
+}
+
+/* === АВАТАР === */
+img.avatar {
+    display: block;
+    margin: 0 auto 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    background-color: #f1f1f1;
+    aspect-ratio: 1 / 1;
+}
+
+/* === ФОРМА === */
+form div {
+    margin-bottom: 15px;
+}
+
+.container form {
+    text-align: left;
+}
+
+.avatar-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }

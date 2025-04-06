@@ -2,8 +2,10 @@ package com.serzhputovski.servlet.servlet;
 
 import com.serzhputovski.servlet.entity.User;
 import com.serzhputovski.servlet.exception.DatabaseException;
-import com.serzhputovski.servlet.service.UserService;
-import com.serzhputovski.servlet.service.impl.UserServiceImpl;
+import com.serzhputovski.servlet.service.ActivationCodeService;
+import com.serzhputovski.servlet.service.AuthService;
+import com.serzhputovski.servlet.service.impl.ActivationCodeServiceImpl;
+import com.serzhputovski.servlet.service.impl.AuthServiceImpl;
 import com.serzhputovski.servlet.validator.UserValidator;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -16,46 +18,43 @@ import java.io.IOException;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    private UserService userService;
+    private AuthService authService;
+    private ActivationCodeService activationCodeService;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.userService = new UserServiceImpl();
+        authService = new AuthServiceImpl();
+        activationCodeService = new ActivationCodeServiceImpl();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/account/register.html");
+        response.sendRedirect(request.getContextPath() + "/auth/register.jsp");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-
-        try {
-            if(!userService.isUsernameAvailable(username)){
-                request.setAttribute("error", "Username is already taken");
-                request.getRequestDispatcher("/account/register.html").forward(request, response);
-                return;
-            }
-        } catch (DatabaseException e) {
-            request.setAttribute("error", e.getMessage());
+        String repeatPassword = request.getParameter("repeatPassword");
+        if (!password.equals(repeatPassword)) {
+            request.setAttribute("error", "The password must be the same!");
+            request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
+            return;
         }
-
-
-        try{
-            UserValidator validator = new UserValidator();
+        try {
             User user = new User(username, password);
-            validator.validate(user);
-            userService.registerUser(user);
-            response.sendRedirect("/account/login.html");
-        }catch(DatabaseException e){
-            e.printStackTrace();
+            user.setEmail(email);
+            new UserValidator().validate(user);
+            authService.register(user);
+            activationCodeService.generateAndSendVerificationCode(user);
+            response.sendRedirect(request.getContextPath() + "/auth/confirmEmail.jsp");
+        } catch (DatabaseException | IllegalArgumentException e) {
             request.setAttribute("error", "Registration failed: " + e.getMessage());
-            request.getRequestDispatcher("/account/register.html").forward(request, response);
+            request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
         }
     }
-
 }

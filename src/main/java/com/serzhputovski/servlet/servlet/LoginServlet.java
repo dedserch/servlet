@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet {
             authService.login(username, password);
             User user = userService.findByUsername(username);
             request.getSession().setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+            response.sendRedirect(request.getContextPath() + "/profile/profile.jsp");
         } catch (DatabaseException e) {
             request.setAttribute("error", "Invalid username or password");
             request.getRequestDispatcher("/auth/login.jsp").forward(request, response);

@@ -1,22 +1,20 @@
 package com.serzhputovski.servlet.dao.impl;
 
 import com.serzhputovski.servlet.dao.ContactDao;
-import com.serzhputovski.servlet.database.DatabaseConnection;
 import com.serzhputovski.servlet.entity.Contact;
 import com.serzhputovski.servlet.exception.DatabaseException;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactDaoImpl implements ContactDao {
+public class ContactDaoImpl extends BaseDao implements ContactDao {
 
     @Override
     public List<Contact> findContactsByUserId(int userId) throws DatabaseException {
         List<Contact> contacts = new ArrayList<>();
         String sql = "SELECT * FROM contacts WHERE user_id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
@@ -34,7 +32,6 @@ public class ContactDaoImpl implements ContactDao {
         } catch (SQLException e) {
             throw new DatabaseException("Failed to fetch contacts by user ID", e);
         }
-
         return contacts;
     }
 
@@ -42,13 +39,12 @@ public class ContactDaoImpl implements ContactDao {
     public void deleteContact(int id, int userId) throws DatabaseException {
         String sql = "DELETE FROM contacts WHERE id = ? AND user_id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             stmt.setInt(2, userId);
             stmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new DatabaseException("Failed to delete contact", e);
         }
@@ -58,7 +54,7 @@ public class ContactDaoImpl implements ContactDao {
     public void addContact(Contact contact) throws DatabaseException {
         String sql = "INSERT INTO contacts (user_id, name, phone, email) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, contact.getUserId());
@@ -66,7 +62,6 @@ public class ContactDaoImpl implements ContactDao {
             stmt.setString(3, contact.getPhone());
             stmt.setString(4, contact.getEmail());
             stmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new DatabaseException("Failed to add contact", e);
         }

@@ -1,21 +1,20 @@
 package com.serzhputovski.servlet.dao.impl;
 
 import com.serzhputovski.servlet.dao.ActivationCodeDao;
-import com.serzhputovski.servlet.database.DatabaseConnection;
 import com.serzhputovski.servlet.entity.ActivationCode;
 import com.serzhputovski.servlet.exception.DatabaseException;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 
-public class ActivationCodeDaoImpl implements ActivationCodeDao {
+public class ActivationCodeDaoImpl extends BaseDao implements ActivationCodeDao {
 
     @Override
     public void save(int userId, String code, LocalDateTime expiration) throws DatabaseException {
         String query = "INSERT INTO activation_codes (user_id, code, expiration) VALUES (?, ?, ?)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setInt(1, userId);
             statement.setString(2, code);
             statement.setTimestamp(3, Timestamp.valueOf(expiration));
@@ -30,8 +29,9 @@ public class ActivationCodeDaoImpl implements ActivationCodeDao {
         String query = "SELECT id, user_id, code, expiration FROM activation_codes WHERE code = ?";
         ActivationCode activationCode = null;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, code);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -53,8 +53,9 @@ public class ActivationCodeDaoImpl implements ActivationCodeDao {
     public void delete(int userId) throws DatabaseException {
         String query = "DELETE FROM activation_codes WHERE user_id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setInt(1, userId);
             statement.executeUpdate();
         } catch (SQLException e) {

@@ -39,6 +39,17 @@ public class DatabaseConnection {
         validateConfig();
     }
 
+    public static String getUrl() {
+        return URL;
+    }
+
+    public static String getUser() {
+        return USER;
+    }
+
+    public static String getPassword() {
+        return PASSWORD;
+    }
     private static void validateConfig() {
         if (URL == null || USER == null || PASSWORD == null) {
             logger.fatal("Invalid database configuration");

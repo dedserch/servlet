@@ -12,22 +12,18 @@
     <div class="avatar-preview">
         <img src="${not empty user.avatarUrl ? user.avatarUrl : '/images/default-avatar.png'}"
              alt="Current Avatar"
-             class="avatar"
-        >
+             class="avatar">
     </div>
 
-    <form action="${pageContext.request.contextPath}/profile/edit" method="POST">
+    <form action="${pageContext.request.contextPath}/profile/edit" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="newUsername">Username:</label>
-            <input type="text" id="newUsername" name="newUsername"
-                   value="${user.username}" required>
+            <input type="text" id="newUsername" name="newUsername" value="${user.username}" required>
         </div>
 
         <div class="form-group">
-            <label for="newAvatarUrl">Avatar URL:</label>
-            <input type="url" id="newAvatarUrl" name="newAvatarUrl"
-                   value="${user.avatarUrl}"
-                   placeholder="https://example.com/avatar.jpg">
+            <label for="newAvatar">Avatar:</label>
+            <input type="file" id="newAvatar" name="newAvatar" accept="image/*">
         </div>
 
         <button type="submit" class="btn-submit">Save Changes</button>

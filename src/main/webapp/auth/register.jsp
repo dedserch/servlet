@@ -1,28 +1,31 @@
-<!-- register.jsp -->
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="messages" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
+  <title><fmt:message key="register.title" /></title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
 <div class="container">
-  <h1>Register</h1>
-  <p>Create a new account</p>
-  <% if (request.getAttribute("error") != null) { %>
-  <div id="error" style="color:red;"><%= request.getAttribute("error") %></div>
-  <% } %>
+  <h1><fmt:message key="register.title" /></h1>
+  <p><fmt:message key="register.subtitle" /></p>
+  <c:if test="${not empty error}">
+    <div id="error" style="color:red;">${error}</div>
+  </c:if>
   <form id="registerForm" action="/register" method="POST">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="password" name="repeatPassword" placeholder="Repeat Password" required>
-    <button type="submit">Register</button>
+    <input type="text" name="username" placeholder="<fmt:message key="username.placeholder" />" required>
+    <input type="email" name="email" placeholder="<fmt:message key="email.placeholder" />" required>
+    <input type="password" name="password" placeholder="<fmt:message key="password.placeholder" />" required>
+    <input type="password" name="repeatPassword" placeholder="<fmt:message key="repeat.password" />" required>
+    <button type="submit"><fmt:message key="register.button" /></button>
   </form>
-  <p class="already-account">Already have an account? <a href="./login.jsp">Log in</a></p>
+  <p class="already-account"><fmt:message key="already.account" /> <a href="./login.jsp"><fmt:message key="login.link" /></a></p>
 </div>
 <script>
   document.getElementById("registerForm").addEventListener("submit", function(e){
@@ -37,7 +40,7 @@
     var password = this.password.value;
     var repeatPassword = this.repeatPassword.value;
     if(password !== repeatPassword){
-      errorDiv.textContent = "The password must be the same!";
+      errorDiv.textContent = "<fmt:message key="password.mismatch" />";
       e.preventDefault();
     }
   });

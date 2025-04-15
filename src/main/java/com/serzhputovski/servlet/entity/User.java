@@ -18,12 +18,14 @@ public class User {
     private String email;
 
     @NotBlank(message = "The password must not be empty")
-    @Size(min=8, max=64, message="The password must contain at least 8 symbols and a maximum of 64 symbols")
+    @Size(min = 8, max = 64, message = "The password must contain at least 8 symbols and a maximum of 64 symbols")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "The password must contain latins characters, numbers or \"_\"")
     private String password;
 
     private boolean enabled = false;
     private String avatarUrl;
+
+    private byte[] encryptedPassword;
 
     public User(String username, String password) {
         this.username = username;
@@ -52,6 +54,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public byte[] getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(byte[] encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     public String getPassword() {

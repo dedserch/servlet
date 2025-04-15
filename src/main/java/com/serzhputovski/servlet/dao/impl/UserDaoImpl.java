@@ -3,19 +3,24 @@ package com.serzhputovski.servlet.dao.impl;
 import com.serzhputovski.servlet.dao.UserDao;
 import com.serzhputovski.servlet.entity.User;
 import com.serzhputovski.servlet.exception.DatabaseException;
+import java.util.Properties;
+
 import java.sql.*;
 
 public class UserDaoImpl extends BaseDao implements UserDao {
+    private static final String SECRET_KEY = "MySuperSecretKey123!";
 
     @Override
     public User findByUsername(String username) throws DatabaseException {
-        String query = "SELECT id, username, password, email, enabled, avatar_url FROM users WHERE username = ?";
+        String query = "SELECT id, username, CAST(AES_DECRYPT(password, ?) AS CHAR) AS password, email, enabled, avatar_url FROM users WHERE username = ?";
         User user = null;
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, username);
+            statement.setString(1, SECRET_KEY);
+            statement.setString(2, username);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     user = new User(resultSet.getString("username"), resultSet.getString("password"));
@@ -28,12 +33,13 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         } catch (SQLException e) {
             throw new DatabaseException("Failed to find user by username", e);
         }
+
         return user;
     }
 
     @Override
     public int save(String username, String email, String password) throws DatabaseException {
-        String query = "INSERT INTO users (username, email, password, enabled, avatar_url) VALUES (?, ?, ?, false, ?)";
+        String query = "INSERT INTO users (username, email, password, enabled, avatar_url) VALUES (?, ?, AES_ENCRYPT(?, ?), false, ?)";
         int generatedId = -1;
 
         try (Connection connection = getConnection();
@@ -42,7 +48,8 @@ public class UserDaoImpl extends BaseDao implements UserDao {
             statement.setString(1, username);
             statement.setString(2, email);
             statement.setString(3, password);
-            statement.setString(4, "default-avatar.png");
+            statement.setString(4, SECRET_KEY);
+            statement.setString(5, "default-avatar.png");
             statement.executeUpdate();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -53,6 +60,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         } catch (SQLException e) {
             throw new DatabaseException("Failed to save user", e);
         }
+
         return generatedId;
     }
 

@@ -8,7 +8,6 @@
     padding: 20px;
 }
 
-/* === ОБЕРТКА КОНТЕЙНЕРА === */
 .contact-wrapper {
     max-width: 1000px;
     margin: 30px auto;
@@ -18,7 +17,6 @@
     border-radius: 10px;
 }
 
-/* === ФОРМА === */
 .contact-form-group {
     display: flex;
     flex-direction: column;
@@ -48,7 +46,6 @@
     background-color: #0056b3;
 }
 
-/* === ТАБЛИЦА === */
 .contact-table {
     width: 100%;
     border-collapse: collapse;
@@ -71,7 +68,6 @@
     background-color: #f9f9f9;
 }
 
-/* === КНОПКИ УДАЛЕНИЯ === */
 .btn-contact-delete {
     background-color: #dc3545;
     color: white;
@@ -84,4 +80,23 @@
 
 .btn-contact-delete:hover {
     background-color: #c82333;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+}
+
+.pagination a.active {
+    font-weight: bold;
+    background-color: #eee;
 }

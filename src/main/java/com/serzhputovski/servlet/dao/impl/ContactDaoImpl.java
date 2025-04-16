@@ -3,6 +3,7 @@ package com.serzhputovski.servlet.dao.impl;
 import com.serzhputovski.servlet.dao.ContactDao;
 import com.serzhputovski.servlet.entity.Contact;
 import com.serzhputovski.servlet.exception.DatabaseException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +11,17 @@ import java.util.List;
 public class ContactDaoImpl extends BaseDao implements ContactDao {
 
     @Override
-    public List<Contact> findContactsByUserId(int userId) throws DatabaseException {
+    public List<Contact> findContactsByUserIdPaged(int userId, int offset, int limit) throws DatabaseException {
         List<Contact> contacts = new ArrayList<>();
-        String sql = "SELECT * FROM contacts WHERE user_id = ?";
+        String sql = "SELECT * FROM contacts WHERE user_id = ? LIMIT ? OFFSET ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
+            stmt.setInt(2, limit);
+            stmt.setInt(3, offset);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     contacts.add(new Contact(
@@ -30,9 +34,28 @@ public class ContactDaoImpl extends BaseDao implements ContactDao {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to fetch contacts by user ID", e);
+            throw new DatabaseException("Failed to fetch paginated contacts", e);
         }
+
         return contacts;
+    }
+
+    @Override
+    public int countContactsByUserId(int userId) throws DatabaseException {
+        String sql = "SELECT COUNT(*) FROM contacts WHERE user_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to count contacts", e);
+        }
+        return 0;
     }
 
     @Override

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${lang}" />
@@ -14,21 +14,18 @@
 <body class="contact-page">
 <div class="contact-wrapper">
   <h2><fmt:message key="contacts.title" /></h2>
-
   <form action="${pageContext.request.contextPath}/change-language" method="post" style="float: right;">
     <input type="hidden" name="lang" value="${lang == 'ru' ? 'en' : 'ru'}" />
     <button type="submit">${lang == 'ru' ? 'EN' : 'RU'}</button>
   </form>
-
   <form action="${pageContext.request.contextPath}/contacts/add" method="post">
     <div class="contact-form-group">
-      <input type="text" name="name" placeholder="<fmt:message key="name.placeholder" />" required>
-      <input type="text" name="phone" placeholder="<fmt:message key="phone.placeholder" />" required>
-      <input type="email" name="email" placeholder="<fmt:message key="email.placeholder" />" required>
+      <input type="text" name="name" placeholder="<fmt:message key='name.placeholder' />" required>
+      <input type="text" name="phone" placeholder="<fmt:message key='phone.placeholder' />" required>
+      <input type="email" name="email" placeholder="<fmt:message key='email.placeholder' />" required>
       <button type="submit" class="btn-contact-add"><fmt:message key="add.button" /></button>
     </div>
   </form>
-
   <c:if test="${not empty contacts}">
     <table class="contact-table">
       <thead>
@@ -55,6 +52,13 @@
       </c:forEach>
       </tbody>
     </table>
+    <c:if test="${totalPages > 1}">
+      <div class="pagination">
+        <c:forEach begin="1" end="${totalPages}" var="i">
+          <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+        </c:forEach>
+      </div>
+    </c:if>
   </c:if>
 </div>
 </body>

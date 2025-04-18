@@ -6,7 +6,13 @@ import com.serzhputovski.servlet.service.AuthService;
 import com.serzhputovski.servlet.service.UserService;
 
 public class AuthServiceImpl implements AuthService {
-    private static final UserService userService = new UserServiceImpl();
+    private UserService userService;
+    public AuthServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
+    public AuthServiceImpl() {
+        this(new UserServiceImpl());
+    }
 
     @Override
     public void register(User user) throws DatabaseException {

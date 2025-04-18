@@ -10,8 +10,11 @@ import java.util.List;
 public class ContactServiceImpl implements ContactService {
     private final ContactDao contactDao;
 
+    public ContactServiceImpl(ContactDao contactDao) {
+        this.contactDao = contactDao;
+    }
     public ContactServiceImpl() {
-        this.contactDao = new ContactDaoImpl();
+        this(new ContactDaoImpl());
     }
 
     @Override

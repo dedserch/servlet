@@ -14,8 +14,16 @@ import com.serzhputovski.servlet.util.VerificationUtil;
 import java.time.LocalDateTime;
 
 public class ActivationCodeServiceImpl implements ActivationCodeService {
-    private final ActivationCodeDao activationCodeDao = new ActivationCodeDaoImpl();
-    private final UserDao userDao = new UserDaoImpl();
+    private final ActivationCodeDao activationCodeDao;
+    private final UserDao userDao;
+
+    public ActivationCodeServiceImpl(ActivationCodeDao activationCodeDao, UserDao userDao) {
+        this.activationCodeDao = activationCodeDao;
+        this.userDao = userDao;
+    }
+    public ActivationCodeServiceImpl() {
+        this(new ActivationCodeDaoImpl(), new UserDaoImpl());
+    }
 
     @Override
     public void generateAndSendVerificationCode(User user) throws DatabaseException {

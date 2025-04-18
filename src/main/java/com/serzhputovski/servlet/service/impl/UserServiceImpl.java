@@ -7,7 +7,15 @@ import com.serzhputovski.servlet.exception.DatabaseException;
 import com.serzhputovski.servlet.service.UserService;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao = new UserDaoImpl();
+    private final UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public UserServiceImpl() {
+        this(new UserDaoImpl());
+    }
 
     @Override
     public int save(String username, String email, String password) throws DatabaseException {
